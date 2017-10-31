@@ -11,11 +11,11 @@ namespace TagsCloudVisualization.Implementation
         private double currentAngle;
         public readonly double AngleStep;
 
-        public Spiral(Point center, double radiusStep, double angleStep)
+        public Spiral(Point center, double radiusStep=1, double angleStep=60)
         {
             Center = center;
             RadiusStep = radiusStep;
-            AngleStep = angleStep;
+            AngleStep = angleStep * Math.PI / 360;
         }
 
         public Point GetNextPoint()
@@ -27,7 +27,7 @@ namespace TagsCloudVisualization.Implementation
             }
             var x = (int)Math.Round(currentRadius * Math.Cos(currentAngle));
             var y = (int)Math.Round(currentRadius * Math.Sin(currentAngle));
-            currentAngle = (currentAngle + AngleStep * Math.PI / 360) % (Math.PI * 2);
+            currentAngle = (currentAngle + AngleStep) % (Math.PI * 2);
             currentRadius += RadiusStep;
             return new Point(x, y);
         }

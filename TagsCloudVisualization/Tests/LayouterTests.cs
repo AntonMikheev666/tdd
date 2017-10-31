@@ -56,5 +56,22 @@ namespace TagsCloudVisualization.Tests
                 new [] {layouter.Center, new Point(radiusStep, 0), new Point(x, y)},
                 opt => opt.ComparingEnumsByValue());
         }
+
+        [Test]
+        public void CircularCloudLayouter_PutNextRectngle_RectanglesDoNotIntersects()
+        {
+            var size = new Size(50, 50);
+            var rectangles = new List<Rectangle>();
+            for (var i = 0; i < 10; i++)
+                rectangles.Add(layouter.PutNextRectangle(size));
+
+            var intersects = false;
+            foreach (var rectangle in rectangles)
+                intersects = rectangles
+                    .Where(r => r != rectangle)
+                    .Any(r => r.IntersectsWith(rectangle));
+
+            intersects.Should().BeFalse();
+        }
     }
 }
