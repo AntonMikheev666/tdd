@@ -24,7 +24,7 @@ namespace TagsCloudVisualization.Tests
         public void CircularCloudLayouter_FirstRectngle_Centered(int weight, int height)
         {
             layouter.PutNextRectangle(new Size(weight, height)).Location
-                .ShouldBeEquivalentTo(new Rectangle(new Point(450, 450), new Size(weight, height)),
+                .ShouldBeEquivalentTo(new Point(450, 450),
                                       opt => opt.ComparingEnumsByValue());
         }
     }
