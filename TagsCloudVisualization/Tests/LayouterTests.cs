@@ -21,10 +21,15 @@ namespace TagsCloudVisualization.Tests
         }
 
         [TestCase(100, 100, TestName = "Square")]
+        [TestCase(100, 200, TestName = "VerticalRectangle")]
+        [TestCase(200, 100, TestName = "HorizontalRectangle")]
+        [TestCase(0, 0, TestName = "Point")]
         public void CircularCloudLayouter_FirstRectngle_Centered(int weight, int height)
         {
+            var expectedLocation = new Point(layouter.Center.X - weight / 2, 
+                                             layouter.Center.Y - height / 2);
             layouter.PutNextRectangle(new Size(weight, height)).Location
-                .ShouldBeEquivalentTo(new Point(450, 450),
+                .ShouldBeEquivalentTo(expectedLocation,
                                       opt => opt.ComparingEnumsByValue());
         }
     }

@@ -18,7 +18,9 @@ namespace TagsCloudVisualization.Implementation
 
         public Rectangle PutNextRectangle(Size rectangleSize)
         {
-            return new Rectangle(new Point(450, 450), rectangleSize);
+            var rectX = Center.X - rectangleSize.Width / 2;
+            var rectY = Center.Y - rectangleSize.Height / 2;
+            return new Rectangle(new Point(rectX, rectY), rectangleSize);
         }
     }
 }
