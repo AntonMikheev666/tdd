@@ -18,6 +18,8 @@ namespace TagsCloudVisualization.Implementation
 
         public Rectangle PutNextRectangle(Size rectangleSize)
         {
+            if (rectangleSize.Height > Center.X * 2 || rectangleSize.Width > Center.Y * 2)
+                throw new ArgumentException("Inappropriate rectangle size");
             var rectX = Center.X - rectangleSize.Width / 2;
             var rectY = Center.Y - rectangleSize.Height / 2;
             return new Rectangle(new Point(rectX, rectY), rectangleSize);
