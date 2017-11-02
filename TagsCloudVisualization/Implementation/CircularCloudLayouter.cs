@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace TagsCloudVisualization.Implementation
 {
-    public class CircularCloudLayouter
+    public class CircularCloudLayouter //интерфейс
     {
-        public Point Center { get; }
+        public Point Center { get; } //private
         private Spiral spiral;
-        private List<Rectangle> rectangles = new List<Rectangle>();
+        private List<Rectangle> rectangles  = new List<Rectangle>();
 
-        public CircularCloudLayouter(Point center, Spiral spiral = null)
+        public CircularCloudLayouter(Point center, Spiral spiral = null) 
         {
             Center = center;
             this.spiral = spiral ?? new Spiral(Center);
@@ -22,27 +22,27 @@ namespace TagsCloudVisualization.Implementation
         public Rectangle PutNextRectangle(Size rectangleSize)
         {
             if (rectangleSize.Height > Center.X * 2 || rectangleSize.Width > Center.Y * 2)
-                throw new ArgumentException("Inappropriate rectangle size");
+                throw new ArgumentException("Inappropriate rectangle size"); //понятнее
 
-            var result = GetNextPossibleRectangle(rectangleSize);
+            var result = GetNextPossibleRectangle(rectangleSize); //var naming
             while (rectangles.Any(r => r.IntersectsWith(result)))
                 result = GetNextPossibleRectangle(rectangleSize);
             rectangles.Add(result);
             return result;
         }
 
-        private Point GetNextPossibleRectangleCenter()
+        private Point GetNextPossibleRectangleCenter() //Тесты
         {
-            var result = spiral.GetNextPoint();
+            var result = spiral.GetNextPoint(); //var naming
             while (rectangles.Any(r => r.Contains(result)))
-                result = spiral.GetNextPoint();
+                result = spiral.GetNextPoint(); //лишняя проверка
             return result;
         }
-
+        //попробовать хранить последнюю точку и искать следующую за О(1)
         private Rectangle GetNextPossibleRectangle(Size rectangleSize)
         {
             var possibleCenter = GetNextPossibleRectangleCenter();
-            var rectX = possibleCenter.X - rectangleSize.Width / 2;
+            var rectX = possibleCenter.X - rectangleSize.Width / 2; //var naming
             var rectY = possibleCenter.Y - rectangleSize.Height / 2;
             return new Rectangle(new Point(rectX, rectY), rectangleSize);
         }
