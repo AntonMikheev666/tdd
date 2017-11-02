@@ -2,17 +2,18 @@
 using TagsCloudVisualization.Implementation;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Text;
+using System.Linq;  
 using FluentAssertions;
 using NUnit.Framework;
+//лишние неймспейсы стоит убирать
 
 namespace TagsCloudVisualization.Tests
 {
     [TestFixture]
     class LayouterTests
     {
-        private CircularCloudLayouter layouter;
+        private CircularCloudLayouter layouter; //sut
 
         [SetUp]
         public void Setup()
@@ -36,7 +37,7 @@ namespace TagsCloudVisualization.Tests
 
         [TestCase(1001, 1001, TestName = "TooBigRectangle")]
         [TestCase(1, 1001, TestName = "TooHighRectangle")]
-        [TestCase(1001, 1, TestName = "TooWideRectangle")]
+        [TestCase(1001, 1, TestName = "TooWideRectangle")]//бесконечное заполнение
         public void CircularCloudLayouter_OutOfBorderRectngle_ShouldThrowException(int weight, int height)
         {
             Assert.Throws<ArgumentException>(() => layouter.PutNextRectangle(new Size(weight, height)));
@@ -65,12 +66,12 @@ namespace TagsCloudVisualization.Tests
             for (var i = 0; i < 10; i++)
                 rectangles.Add(layouter.PutNextRectangle(size));
 
-            var intersects = false;
+            var intersects = false; //LINQ
             foreach (var rectangle in rectangles)
                 intersects = rectangles
                     .Where(r => r != rectangle)
                     .Any(r => r.IntersectsWith(rectangle));
-
+            
             intersects.Should().BeFalse();
         }
     }
