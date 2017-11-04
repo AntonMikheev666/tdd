@@ -1,8 +1,6 @@
 ﻿using System;
 using TagsCloudVisualization.Implementation;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;  
 using FluentAssertions;
 using NUnit.Framework;
 //лишние неймспейсы стоит убирать
@@ -17,7 +15,7 @@ namespace TagsCloudVisualization.Tests
         public void SpiralPointLayouter_Should_CalculateCorrect(double radiusStep, double angleStep)
         {
             var center = new Point(500, 500);
-            var pointLayouter = new SpiralPointLayouterForTesting(center);
+            var pointLayouter = new SpiralPointLayouter(center);
 
             var x = center.X + (int)Math.Round(2 * radiusStep * Math.Cos(angleStep * Math.PI / 360));
             var y = center.Y + (int)Math.Round(2 * radiusStep * Math.Sin(angleStep * Math.PI / 360));
@@ -32,7 +30,7 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_NegativeRadiusStepOnFirstCalculation_ShouldThrowException()
         {
-            var pointLayouter = new SpiralPointLayouterForTesting(new Point(500, 500));
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
             pointLayouter.GetNextPoint(1, 50);
             Assert.Throws<ArgumentException>(() => pointLayouter.GetNextPoint(-1, 50));
         }
@@ -40,7 +38,7 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_TooBigNegativeRadiusStep_ShouldThrowException()
         {
-            var pointLayouter = new SpiralPointLayouterForTesting(new Point(500, 500));
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
             pointLayouter.GetNextPoint(1, 50);
 
             pointLayouter.GetNextPoint(10, 50);
@@ -52,7 +50,7 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_Radius_ChangesCorrectly()
         {
-            var pointLayouter = new SpiralPointLayouterForTesting(new Point(500, 500));
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
             pointLayouter.GetNextPoint(1, 50);
 
             var rnd = new Random();

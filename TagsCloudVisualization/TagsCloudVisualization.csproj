@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Implementation\CircularCloudLayouter.cs" />
     <Compile Include="Implementation\ICloudLayouter.cs" />
+    <Compile Include="Implementation\PointSelectionException.cs" />
     <Compile Include="Implementation\RectangleExtantion.cs" />
     <Compile Include="Implementation\SpiralPointLayouter.cs" />
     <Compile Include="Tests\ExtantionsTests.cs" />

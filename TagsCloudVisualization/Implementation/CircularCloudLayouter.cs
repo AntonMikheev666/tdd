@@ -36,11 +36,15 @@ namespace TagsCloudVisualization.Implementation
                 throw new ArgumentException($"Incorrect rectangle size: " +
                                             $"Height={rectangleSize.Height} Width={rectangleSize.Width}, " +
                                             $"but maxHeight={workingArea.Height} and " +
-                                            $"maxWidth={workingArea.Width}");
+                                            $"maxWidth={workingArea.Width}.");
 
             var nextRectangle = GetNextRectangle(rectangleSize);
             while (rectangles.Any(r => r.IntersectsWith(nextRectangle)))
+            {
+                if(pointLayouter.CurrentRadius > workingArea.GetDiagonal() / 2)
+                    throw new PointSelectionException("Out of free space.");
                 nextRectangle = GetNextRectangle(rectangleSize);
+            }
 
             rectangles.Add(nextRectangle);
             return nextRectangle;

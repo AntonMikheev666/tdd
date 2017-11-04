@@ -6,7 +6,7 @@ namespace TagsCloudVisualization.Implementation
     public class SpiralPointLayouter
     {
         private readonly Point center;
-        protected double currentRadius;
+        public double CurrentRadius { get; private set; }
         private double currentAngle;
         private bool wasUsed;
 
@@ -14,8 +14,7 @@ namespace TagsCloudVisualization.Implementation
         {
             this.center = center;
         }
-
-        //динамический шаг + тесты на парматеры
+        
         public Point GetNextPoint(double radiusStep, double angleStep)
         {
             if (!wasUsed)
@@ -26,24 +25,16 @@ namespace TagsCloudVisualization.Implementation
 
             var angleStepInRadians = angleStep * Math.PI / 360;
             currentAngle = (currentAngle + angleStepInRadians) % (Math.PI * 2);
-            currentRadius += radiusStep;
+            CurrentRadius += radiusStep;
 
-            if (currentRadius < 0)
+            if (CurrentRadius < 0)
                 throw new ArgumentException($"Redius can't be negative. " +
-                                            $"Current radius: {currentRadius}" +
-                                            $"Radius step: {radiusStep}");
+                                            $"Current radius: {CurrentRadius}" +
+                                            $"Radius step: {radiusStep}.");
 
-            var x = center.X + (int)Math.Round(currentRadius * Math.Cos(currentAngle));
-            var y = center.Y + (int)Math.Round(currentRadius * Math.Sin(currentAngle));
+            var x = center.X + (int)Math.Round(CurrentRadius * Math.Cos(currentAngle));
+            var y = center.Y + (int)Math.Round(CurrentRadius * Math.Sin(currentAngle));
             return new Point(x, y);
-        }
-    }
-
-    public class SpiralPointLayouterForTesting: SpiralPointLayouter
-    {
-        public double CurrentRadius => this.currentRadius;
-        public SpiralPointLayouterForTesting(Point point) : base(point)
-        {
         }
     }
 }

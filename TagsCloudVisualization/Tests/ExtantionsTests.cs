@@ -1,8 +1,6 @@
 ﻿using System;
 using TagsCloudVisualization.Implementation;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;  
 using FluentAssertions;
 using NUnit.Framework;
 //лишние неймспейсы стоит убирать
@@ -29,6 +27,20 @@ namespace TagsCloudVisualization.Tests
             var actualCenter = new Point(actualCenterX, actualCenterY);
 
             rect.GetCenter().ShouldBeEquivalentTo(actualCenter);
+        }
+
+        [Test]
+        public void RectangleGetDiagonal_Should_ReturnCorrectDiagonal()
+        {
+            var rnd = new Random();
+            var height = rnd.Next();
+            var width = rnd.Next();
+
+            var rect = new Rectangle(0, 0, width, height);
+
+            var actualDiagonal = Math.Sqrt(width * width + height * height);
+
+            rect.GetDiagonal().ShouldBeEquivalentTo(actualDiagonal);
         }
     }
 }

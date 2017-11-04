@@ -11,5 +11,10 @@ namespace TagsCloudVisualization.Implementation
             var centerY = rect.Location.Y + (int)Math.Round(rect.Height / 2.0, 0);
             return new Point(centerX, centerY);
         }
+
+        public static double GetDiagonal(this Rectangle rect)
+        {
+            return Math.Sqrt(rect.Height * rect.Height + rect.Width * rect.Width);
+        }
     }
 }
