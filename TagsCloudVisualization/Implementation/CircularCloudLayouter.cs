@@ -39,20 +39,22 @@ namespace TagsCloudVisualization.Implementation
                                             $"maxWidth={workingArea.Width}.");
 
             var nextRectangle = GetNextRectangle(rectangleSize);
-            while (rectangles.Any(r => r.IntersectsWith(nextRectangle)))
-            {
-                if(pointLayouter.CurrentRadius > workingArea.GetDiagonal() / 2)
-                    throw new PointSelectionException("Out of free space.");
+            while (rectangles.Any(r => r.IntersectsWith(nextRectangle)) || 
+                    !workingArea.Contains(nextRectangle))
                 nextRectangle = GetNextRectangle(rectangleSize);
-            }
 
             rectangles.Add(nextRectangle);
             return nextRectangle;
         }
+
         //попробовать хранить последнюю точку и искать следующую за О(1)
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
             var possibleCenter = pointLayouter.GetNextPoint(0.1, 50);
+
+            if (pointLayouter.CurrentRadius >= workingArea.GetDiagonal() / 2)
+                throw new PointSelectionException("Out of free space.");
+
             var leftTopCorner = GetLeftTopCornerLocation(possibleCenter, rectangleSize);
             return new Rectangle(leftTopCorner, rectangleSize);
         }

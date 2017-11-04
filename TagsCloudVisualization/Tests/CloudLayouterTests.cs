@@ -28,12 +28,22 @@ namespace TagsCloudVisualization.Tests
 
         [TestCase(1001, 1001, TestName = "TooBigRectangle")]
         [TestCase(1, 1001, TestName = "TooHighRectangle")]
-        [TestCase(1001, 1, TestName = "TooWideRectangle")]//бесконечное заполнение
-        public void CircularCloudLayouter_OutOfBorderRectngle_ShouldThrowException(int weight, int height)
+        [TestCase(1001, 1, TestName = "TooWideRectangle")]
+        public void CircularCloudLayouter_IncorrectSizeRectngle_ShouldThrowException(int weight, int height)
         {
             var center = new Point(500, 500);
             var sut = new CircularCloudLayouter(center);
             Assert.Throws<ArgumentException>(() => sut.PutNextRectangle(new Size(weight, height)));
+        }
+
+        [Test]
+        public void CircularCloudLayouter_OutOfBorderRectngle_ShouldThrowException()
+        {
+            var center = new Point(1, 1);
+            var sut = new CircularCloudLayouter(center);
+            sut.PutNextRectangle(new Size(2, 2));
+
+            Assert.Throws<PointSelectionException>(() => sut.PutNextRectangle(new Size(1, 1)));
         }
 
         [Test]
