@@ -57,7 +57,9 @@
     <Compile Include="Implementation\ICloudLayouter.cs" />
     <Compile Include="Implementation\RectangleExtantion.cs" />
     <Compile Include="Implementation\SpiralPointLayouter.cs" />
-    <Compile Include="Tests\LayouterTests.cs" />
+    <Compile Include="Tests\ExtantionsTests.cs" />
+    <Compile Include="Tests\PointLayouterTests.cs" />
+    <Compile Include="Tests\CloudLayouterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

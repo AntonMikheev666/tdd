@@ -6,7 +6,7 @@ namespace TagsCloudVisualization.Implementation
     public class SpiralPointLayouter
     {
         private readonly Point center;
-        private double currentRadius;
+        protected double currentRadius;
         private double currentAngle;
         private bool wasUsed;
 
@@ -33,9 +33,17 @@ namespace TagsCloudVisualization.Implementation
                                             $"Current radius: {currentRadius}" +
                                             $"Radius step: {radiusStep}");
 
-            var x = (int)Math.Round(currentRadius * Math.Cos(currentAngle));
-            var y = (int)Math.Round(currentRadius * Math.Sin(currentAngle));
+            var x = center.X + (int)Math.Round(currentRadius * Math.Cos(currentAngle));
+            var y = center.Y + (int)Math.Round(currentRadius * Math.Sin(currentAngle));
             return new Point(x, y);
+        }
+    }
+
+    public class SpiralPointLayouterForTesting: SpiralPointLayouter
+    {
+        public double CurrentRadius => this.currentRadius;
+        public SpiralPointLayouterForTesting(Point point) : base(point)
+        {
         }
     }
 }
