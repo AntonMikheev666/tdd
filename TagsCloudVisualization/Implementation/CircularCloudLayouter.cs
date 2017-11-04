@@ -5,20 +5,29 @@ using System.Linq;
 
 namespace TagsCloudVisualization.Implementation
 {
-    public class CircularCloudLayouter //интерфейс
+    public class CircularCloudLayouter: ICloudLayouter
     {
-        private Point center { get; }
+        private Point center;
         private Rectangle workingArea;
-        private Spiral spiral;
+        private SpiralPointLayouter pointLayouter;
         private List<Rectangle> rectangles  = new List<Rectangle>();
+        public CircularCloudLayouter(Point center)
+        {
+            SetCenterAndWorkingArea(center);
+            pointLayouter = new SpiralPointLayouter(this.center);
+        }
 
-        public CircularCloudLayouter(Point center, Spiral spiral = null) 
+        public CircularCloudLayouter(Point center, SpiralPointLayouter spiralPointLayouter)
+        {
+            SetCenterAndWorkingArea(center);
+            this.pointLayouter = spiralPointLayouter;
+        }
+
+        private void SetCenterAndWorkingArea(Point center)
         {
             this.center = center;
             var workingAreaSize = new Size(center.X * 2, center.Y * 2);
-            var workingAreaLocation = GetLeftTopCornerLocation(center, workingAreaSize);
-            workingArea = new Rectangle(workingAreaLocation, workingAreaSize);
-            this.spiral = spiral ?? new Spiral(this.center);
+            workingArea = new Rectangle(new Point(0, 0), workingAreaSize);
         }
 
         public Rectangle PutNextRectangle(Size rectangleSize)
@@ -39,7 +48,7 @@ namespace TagsCloudVisualization.Implementation
         //попробовать хранить последнюю точку и искать следующую за О(1)
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
-            var possibleCenter = spiral.GetNextPoint();
+            var possibleCenter = pointLayouter.GetNextPoint(0.1, 50);
             var leftTopCorner = GetLeftTopCornerLocation(possibleCenter, rectangleSize);
             return new Rectangle(leftTopCorner, rectangleSize);
         }

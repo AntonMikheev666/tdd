@@ -12,14 +12,6 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class LayouterTests
     {
-        private CircularCloudLayouter SUT; //sut
-
-        [SetUp]
-        public void Setup()
-        {
-            SUT = new CircularCloudLayouter(new Point(500, 500));
-        }
-
         [TestCase(100, 100, TestName = "Square")]
         [TestCase(100, 200, TestName = "VerticalRectangle")]
         [TestCase(200, 100, TestName = "HorizontalRectangle")]
@@ -27,9 +19,11 @@ namespace TagsCloudVisualization.Tests
         [TestCase(1000, 1000, TestName = "BiggestPossiblerectangle")]
         public void CircularCloudLayouter_FirstRectngle_Centered(int weight, int height)
         {
-            var actualCenter = new Point(500, 500);
-            SUT.PutNextRectangle(new Size(weight, height)).GetCenter()
-                .ShouldBeEquivalentTo(actualCenter);
+            var center = new Point(500, 500);
+            var sut = new CircularCloudLayouter(center);
+            sut.PutNextRectangle(new Size(weight, height))
+                .GetCenter()
+                .ShouldBeEquivalentTo(center);
         }
 
         [TestCase(1001, 1001, TestName = "TooBigRectangle")]
@@ -37,32 +31,71 @@ namespace TagsCloudVisualization.Tests
         [TestCase(1001, 1, TestName = "TooWideRectangle")]//бесконечное заполнение
         public void CircularCloudLayouter_OutOfBorderRectngle_ShouldThrowException(int weight, int height)
         {
-            Assert.Throws<ArgumentException>(() => SUT.PutNextRectangle(new Size(weight, height)));
+            var center = new Point(500, 500);
+            var sut = new CircularCloudLayouter(center);
+            Assert.Throws<ArgumentException>(() => sut.PutNextRectangle(new Size(weight, height)));
+        }
+
+        [TestCase(1, 50, TestName = "PositiveAngleStep")]
+        [TestCase(1, -50, TestName = "NegativeAngleStep")]
+        public void SpiralPointLayouter_Should_CalculateCorrect(double radiusStep, double angleStep)
+        {
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
+
+            var x = (int)Math.Round(2 * radiusStep * Math.Cos(2*angleStep * Math.PI / 360));
+            var y = (int)Math.Round(2 * radiusStep * Math.Sin(2*angleStep * Math.PI / 360));
+
+            var result = new [] {pointLayouter.GetNextPoint(radiusStep, angleStep),
+                                 pointLayouter.GetNextPoint(radiusStep, angleStep),
+                                 pointLayouter.GetNextPoint(radiusStep, angleStep)};
+            result.ShouldBeEquivalentTo(
+                new [] {new Point(500, 500), new Point((int)radiusStep, 0), new Point(x, y)},
+                opt => opt.ComparingEnumsByValue());
         }
 
         [Test]
-        public void Spiral_Should_CalculateCorrect()
+        public void SpirelPointLayouter_NegativeRadiusStepOnFirstCalculation_ShouldThrowException()
         {
-            int radiusStep = 1, angleStep = 60;
-            var spiral = new Spiral(new Point(500, 500), radiusStep, angleStep);
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
+            pointLayouter.GetNextPoint(1, 50);
+            Assert.Throws<ArgumentException>(() => pointLayouter.GetNextPoint(-1, 50));
+        }
 
-            var x = (int)Math.Round(2 * radiusStep * Math.Cos(angleStep * Math.PI / 360));
-            var y = (int)Math.Round(2 * radiusStep * Math.Sin(angleStep * Math.PI / 360));
+        [Test]
+        public void SpirelPointLayouter_TooBigRadiusStep_ShouldThrowException()
+        {
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
+            pointLayouter.GetNextPoint(1, 50);
 
-            var result = new [] {spiral.GetNextPoint(), spiral.GetNextPoint(), spiral.GetNextPoint()};
-            result.ShouldBeEquivalentTo(
-                new [] {new Point(500, 500), new Point(radiusStep, 0), new Point(x, y)},
-                opt => opt.ComparingEnumsByValue());
+            pointLayouter.GetNextPoint(10, 50);
+            pointLayouter.GetNextPoint(10, 50);
+
+            Assert.Throws<ArgumentException>(() => pointLayouter.GetNextPoint(-30, 50));
+        }
+
+        [Test]
+        public void SpirelPointLayouter_TooBigRadiusStep_()
+        {
+            var pointLayouter = new SpiralPointLayouter(new Point(500, 500));
+            pointLayouter.GetNextPoint(1, 50);
+
+            pointLayouter.GetNextPoint(10, 50);
+            pointLayouter.GetNextPoint(10, 50);
+
+            Assert.Throws<ArgumentException>(() => pointLayouter.GetNextPoint(-30, 50));
         }
 
         [Test]
         public void CircularCloudLayouter_PutNextRectngle_RectanglesDoNotIntersects()
         {
+            var center = new Point(500, 500);
+            var sut = new CircularCloudLayouter(center);
+
             var size = new Size(50, 50);
             var rectangles = new List<Rectangle>();
             
             for (var i = 0; i < 10; i++)
-                rectangles.Add(SUT.PutNextRectangle(size));
+                rectangles.Add(sut.PutNextRectangle(size));
 
             rectangles.
                 Select(r => 
