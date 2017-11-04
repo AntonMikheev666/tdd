@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\CircularCloudLayouter.cs" />
+    <Compile Include="Implementation\RectangleExtantion.cs" />
     <Compile Include="Implementation\Spiral.cs" />
     <Compile Include="Tests\LayouterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
