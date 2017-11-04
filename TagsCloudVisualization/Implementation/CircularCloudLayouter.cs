@@ -9,8 +9,9 @@ namespace TagsCloudVisualization.Implementation
     {
         private Point center;
         private Rectangle workingArea;
+        public Rectangle GetWorkingArea => workingArea;
         private SpiralPointLayouter pointLayouter;
-        private List<Rectangle> rectangles  = new List<Rectangle>();
+        public readonly List<Rectangle> Rectangles  = new List<Rectangle>();
         public CircularCloudLayouter(Point center)
         {
             SetCenterAndWorkingArea(center);
@@ -39,11 +40,11 @@ namespace TagsCloudVisualization.Implementation
                                             $"maxWidth={workingArea.Width}.");
 
             var nextRectangle = GetNextRectangle(rectangleSize);
-            while (rectangles.Any(r => r.IntersectsWith(nextRectangle)) || 
+            while (Rectangles.Any(r => r.IntersectsWith(nextRectangle)) || 
                     !workingArea.Contains(nextRectangle))
                 nextRectangle = GetNextRectangle(rectangleSize);
 
-            rectangles.Add(nextRectangle);
+            Rectangles.Add(nextRectangle);
             return nextRectangle;
         }
 
