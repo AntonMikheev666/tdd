@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace TagsCloudVisualization.Tests
 {
     [TestFixture]
-    class ExtantionTests
+    class ExtantionsTests
     {
         [Test]
         public void PointExtantion_GetLeftTopCorner_ReturnCorrectPoint()

@@ -7,22 +7,15 @@ namespace TagsCloudVisualization.Implementation
 {
     public class CircularCloudLayouter : ICloudLayouter
     {
-        private Point center;
+        protected Point center;
         protected Rectangle workingArea;
-        public Rectangle GetWorkingArea => workingArea;
+        protected List<Rectangle> rectangles = new List<Rectangle>();
         private SpiralPointLayouter pointLayouter;
-        public readonly List<Rectangle> rectangles = new List<Rectangle>();
 
         public CircularCloudLayouter(Point center)
         {
             SetCenterAndWorkingArea(center);
-            pointLayouter = new SpiralPointLayouter(this.center);
-        }
-
-        public CircularCloudLayouter(Point center, SpiralPointLayouter spiralPointLayouter)
-        {
-            SetCenterAndWorkingArea(center);
-            this.pointLayouter = spiralPointLayouter;
+            pointLayouter = new SpiralPointLayouter(this.center, workingArea.GetDiagonal() / 2);
         }
 
         private void SetCenterAndWorkingArea(Point center)
@@ -57,9 +50,6 @@ namespace TagsCloudVisualization.Implementation
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
             var possibleCenter = pointLayouter.GetNextPoint(0.1, 50);
-
-            if (pointLayouter.CurrentRadius >= workingArea.GetDiagonal() / 2)
-                throw new PointSelectionException("Out of free space.");
 
             var leftTopCorner = possibleCenter.GetLeftTopCorner(rectangleSize);
             return new Rectangle(leftTopCorner, rectangleSize);

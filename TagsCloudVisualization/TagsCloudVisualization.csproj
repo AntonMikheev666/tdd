@@ -59,6 +59,8 @@
     <Compile Include="Implementation\PointSelectionException.cs" />
     <Compile Include="Implementation\RectangleExtantion.cs" />
     <Compile Include="Implementation\SpiralPointLayouter.cs" />
+    <Compile Include="Implementation\TestCircularCloudLayouter.cs" />
+    <Compile Include="Implementation\TestSpiralPointLayouter.cs" />
     <Compile Include="Tests\ExtantionsTests.cs" />
     <Compile Include="Tests\PointLayouterTests.cs" />
     <Compile Include="Tests\CloudLayouterTests.cs" />

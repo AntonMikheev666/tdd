@@ -5,14 +5,16 @@ namespace TagsCloudVisualization.Implementation
 {
     public class SpiralPointLayouter
     {
-        private readonly Point center;
-        public double CurrentRadius { get; private set; }
-        private double currentAngle;
+        protected readonly Point center;
+        protected double currentRadius;
+        protected double currentAngle;
         private bool wasUsed;
+        private readonly double radiusLimit;
 
-        public SpiralPointLayouter(Point center)
+        public SpiralPointLayouter(Point center, double radiusLimit)
         {
             this.center = center;
+            this.radiusLimit = radiusLimit;
         }
         
         public Point GetNextPoint(double radiusStep, double angleStep)
@@ -23,28 +25,31 @@ namespace TagsCloudVisualization.Implementation
                 return center;
             }
 
-            UpdateAngleAndRadius(angleStep, radiusStep);
+            UpdateAngleAndRadius(radiusStep, angleStep);
 
             RadiusCheck(radiusStep);
 
-            var x = center.X + (int)Math.Round(CurrentRadius * Math.Cos(currentAngle));
-            var y = center.Y + (int)Math.Round(CurrentRadius * Math.Sin(currentAngle));
+            var x = center.X + (int)Math.Round(currentRadius * Math.Cos(currentAngle));
+            var y = center.Y + (int)Math.Round(currentRadius * Math.Sin(currentAngle));
             return new Point(x, y);
         }
 
-        private void UpdateAngleAndRadius(double angleStep, double radiusStep)
+        protected void UpdateAngleAndRadius(double radiusStep, double angleStep)
         {
             var angleStepInRadians = angleStep * Math.PI / 360;
             currentAngle = (currentAngle + angleStepInRadians) % (Math.PI * 2);
-            CurrentRadius += radiusStep;
+            currentRadius += radiusStep;
         }
 
         private void RadiusCheck(double radiusStep)
         {
-            if (CurrentRadius < 0)
+            if (currentRadius < 0)
                 throw new ArgumentException($"Redius can't be negative. " +
-                                            $"Current radius: {CurrentRadius - radiusStep}" +
+                                            $"Current radius: {currentRadius - radiusStep} " +
                                             $"Radius step: {radiusStep}.");
+
+            if (currentRadius >= radiusLimit)
+                throw new PointSelectionException("Out of free space.");
         }
     }
 }

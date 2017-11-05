@@ -14,25 +14,28 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class CloudLayouterTests
     {
-        private CircularCloudLayouter sut;
+        private TestCircularCloudLayouter sut;
 
         [SetUp]
         public void SetUp()
         {
-            sut = new CircularCloudLayouter(new Point(500, 500));
+            sut = new TestCircularCloudLayouter(new Point(500, 500));
         }
 
         [TearDown]
         public void TearDown()
         {
-            var canvasBitmap = new Bitmap(sut.GetWorkingArea.Width, sut.GetWorkingArea.Height);
+            if(sut.Rectangles.Count == 0)
+                return;
+
+            var canvasBitmap = new Bitmap(sut.WorkingArea.Width, sut.WorkingArea.Height);
             var pen = new Pen(Color.Black);
             var testPictureName = TestContext.CurrentContext.Test.Name + ".png";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, testPictureName);
             var canvas = Graphics.FromImage(canvasBitmap);
 
             canvas.Clear(Color.White);
-            canvas.DrawRectangles(pen, sut.rectangles.ToArray());
+            canvas.DrawRectangles(pen, sut.Rectangles.ToArray());
             canvas.Save();
 
             canvasBitmap.Save(path, ImageFormat.Png);
