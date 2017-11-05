@@ -32,7 +32,7 @@ namespace TagsCloudVisualization.Tests
             var canvas = Graphics.FromImage(canvasBitmap);
 
             canvas.Clear(Color.White);
-            canvas.DrawRectangles(pen, sut.Rectangles.ToArray());
+            canvas.DrawRectangles(pen, sut.rectangles.ToArray());
             canvas.Save();
 
             canvasBitmap.Save(path, ImageFormat.Png);

@@ -5,13 +5,14 @@ using System.Linq;
 
 namespace TagsCloudVisualization.Implementation
 {
-    public class CircularCloudLayouter: ICloudLayouter
+    public class CircularCloudLayouter : ICloudLayouter
     {
         private Point center;
-        private Rectangle workingArea;
+        protected Rectangle workingArea;
         public Rectangle GetWorkingArea => workingArea;
         private SpiralPointLayouter pointLayouter;
-        public readonly List<Rectangle> Rectangles  = new List<Rectangle>();
+        public readonly List<Rectangle> rectangles = new List<Rectangle>();
+
         public CircularCloudLayouter(Point center)
         {
             SetCenterAndWorkingArea(center);
@@ -33,19 +34,23 @@ namespace TagsCloudVisualization.Implementation
 
         public Rectangle PutNextRectangle(Size rectangleSize)
         {
+            RectangleSizeCheck(rectangleSize);
+
+            var nextRectangle = GetNextRectangle(rectangleSize);
+            while (rectangles.Any(r => r.IntersectsWith(nextRectangle)) || !workingArea.Contains(nextRectangle))
+                nextRectangle = GetNextRectangle(rectangleSize);
+
+            rectangles.Add(nextRectangle);
+            return nextRectangle;
+        }
+
+        private void RectangleSizeCheck(Size rectangleSize)
+        {
             if (rectangleSize.Height > workingArea.Height || rectangleSize.Width > workingArea.Width)
                 throw new ArgumentException($"Incorrect rectangle size: " +
                                             $"Height={rectangleSize.Height} Width={rectangleSize.Width}, " +
                                             $"but maxHeight={workingArea.Height} and " +
                                             $"maxWidth={workingArea.Width}.");
-
-            var nextRectangle = GetNextRectangle(rectangleSize);
-            while (Rectangles.Any(r => r.IntersectsWith(nextRectangle)) || 
-                    !workingArea.Contains(nextRectangle))
-                nextRectangle = GetNextRectangle(rectangleSize);
-
-            Rectangles.Add(nextRectangle);
-            return nextRectangle;
         }
 
         //попробовать хранить последнюю точку и искать следующую за О(1)
@@ -56,15 +61,8 @@ namespace TagsCloudVisualization.Implementation
             if (pointLayouter.CurrentRadius >= workingArea.GetDiagonal() / 2)
                 throw new PointSelectionException("Out of free space.");
 
-            var leftTopCorner = GetLeftTopCornerLocation(possibleCenter, rectangleSize);
+            var leftTopCorner = possibleCenter.GetLeftTopCorner(rectangleSize);
             return new Rectangle(leftTopCorner, rectangleSize);
-        }
-
-        private Point GetLeftTopCornerLocation(Point center, Size rectSize)
-        {
-            var x = center.X - rectSize.Width / 2;
-            var y = center.Y - rectSize.Height / 2;
-            return new Point(x, y);
         }
     }
 }

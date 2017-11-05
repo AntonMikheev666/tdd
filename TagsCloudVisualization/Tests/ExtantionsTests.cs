@@ -11,7 +11,23 @@ namespace TagsCloudVisualization.Tests
     class ExtantionTests
     {
         [Test]
-        public void RectangleGetCenter_Should_ReturnCorrectCenter()
+        public void PointExtantion_GetLeftTopCorner_ReturnCorrectPoint()
+        {
+            var rnd = new Random();
+            var x = rnd.Next();
+            var y = rnd.Next();
+            var height = rnd.Next();
+            var width = rnd.Next();
+
+            var center = new Point(x, y);
+
+            var leftTopCorner = new Point(x - width / 2, y - height / 2);
+
+            center.GetLeftTopCorner(new Size(width, height)).ShouldBeEquivalentTo(leftTopCorner);
+        }
+
+        [Test]
+        public void RectangleExtantion_GetCenter_ReturnCorrectCenter()
         {
             var rnd = new Random();
             var x = rnd.Next(int.MinValue, 0);
@@ -30,7 +46,7 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void RectangleGetDiagonal_Should_ReturnCorrectDiagonal()
+        public void RectangleExtantion_GetDiagonal_ReturnCorrectDiagonal()
         {
             var rnd = new Random();
             var height = rnd.Next();
