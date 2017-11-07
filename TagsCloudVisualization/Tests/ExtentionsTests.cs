@@ -8,10 +8,10 @@ using NUnit.Framework;
 namespace TagsCloudVisualization.Tests
 {
     [TestFixture]
-    class ExtantionsTests
+    class ExtentionsTests
     {
         [Test]
-        public void PointExtantion_GetLeftTopCorner_ReturnCorrectPoint()
+        public void PointExtention_GetLeftTopCorner_ReturnCorrectPoint()
         {
             var rnd = new Random();
             var x = rnd.Next();
@@ -27,7 +27,7 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void RectangleExtantion_GetCenter_ReturnCorrectCenter()
+        public void RectangleExtention_GetCenter_ReturnCorrectCenter()
         {
             var rnd = new Random();
             var x = rnd.Next(int.MinValue, 0);
@@ -46,7 +46,7 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void RectangleExtantion_GetDiagonal_ReturnCorrectDiagonal()
+        public void RectangleExtention_GetDiagonal_ReturnCorrectDiagonal()
         {
             var rnd = new Random();
             var height = rnd.Next();

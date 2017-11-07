@@ -1,6 +1,7 @@
 using System.Drawing;
+using TagsCloudVisualization.Implementation;
 
-namespace TagsCloudVisualization.Implementation
+namespace TagsCloudVisualization.Tests
 {
     public class TestSpiralPointLayouter : SpiralPointLayouter
     {

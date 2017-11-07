@@ -55,13 +55,13 @@
   <ItemGroup>
     <Compile Include="Implementation\CircularCloudLayouter.cs" />
     <Compile Include="Implementation\ICloudLayouter.cs" />
-    <Compile Include="Implementation\PointExtantion.cs" />
+    <Compile Include="Implementation\PointExtention.cs" />
     <Compile Include="Implementation\PointSelectionException.cs" />
-    <Compile Include="Implementation\RectangleExtantion.cs" />
+    <Compile Include="Implementation\RectangleExtention.cs" />
     <Compile Include="Implementation\SpiralPointLayouter.cs" />
-    <Compile Include="Implementation\TestCircularCloudLayouter.cs" />
-    <Compile Include="Implementation\TestSpiralPointLayouter.cs" />
-    <Compile Include="Tests\ExtantionsTests.cs" />
+    <Compile Include="Tests\TestCircularCloudLayouter.cs" />
+    <Compile Include="Tests\TestSpiralPointLayouter.cs" />
+    <Compile Include="Tests\ExtentionsTests.cs" />
     <Compile Include="Tests\PointLayouterTests.cs" />
     <Compile Include="Tests\CloudLayouterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

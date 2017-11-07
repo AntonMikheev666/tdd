@@ -49,10 +49,7 @@ namespace TagsCloudVisualization.Implementation
         //попробовать хранить последнюю точку и искать следующую за О(1)
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
-            var possibleCenter = pointLayouter.GetNextPoint(0.1, 50);
-
-            var leftTopCorner = possibleCenter.GetLeftTopCorner(rectangleSize);
-            return new Rectangle(leftTopCorner, rectangleSize);
+            return new Rectangle(pointLayouter.GetNextPoint(0.1, 50).GetLeftTopCorner(rectangleSize), rectangleSize);
         }
     }
 }

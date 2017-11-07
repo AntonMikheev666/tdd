@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace TagsCloudVisualization.Implementation
 {
-    public static class RectangleExtantion
+    public static class RectangleExtention
     {
         public static Point GetCenter(this Rectangle rect)
         {
