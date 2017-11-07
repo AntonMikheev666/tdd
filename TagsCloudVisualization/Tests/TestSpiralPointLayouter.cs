@@ -9,7 +9,7 @@ namespace TagsCloudVisualization.Tests
         public double CurrentRadius => currentRadius;
         public double CurrentAngle => currentAngle;
 
-        public TestSpiralPointLayouter(Point center, double radiusLimit) : base(center, radiusLimit)
+        public TestSpiralPointLayouter(Point center): base(center)
         {
         }
 

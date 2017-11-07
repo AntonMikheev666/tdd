@@ -14,12 +14,13 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class CloudLayouterTests
     {
+        private Point center = new Point(500, 500);
         private TestCircularCloudLayouter sut;
 
         [SetUp]
         public void SetUp()
         {
-            sut = new TestCircularCloudLayouter(new Point(500, 500));
+            sut = new TestCircularCloudLayouter(center);
         }
 
         [TearDown]
@@ -28,7 +29,7 @@ namespace TagsCloudVisualization.Tests
             if(sut.Rectangles.Count == 0)
                 return;
 
-            var canvasBitmap = new Bitmap(sut.WorkingArea.Width, sut.WorkingArea.Height);
+            var canvasBitmap = new Bitmap(center.X * 2, center.Y * 2);
             var pen = new Pen(Color.Black);
             var testPictureName = TestContext.CurrentContext.Test.Name + ".png";
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, testPictureName);
@@ -53,30 +54,14 @@ namespace TagsCloudVisualization.Tests
                 .ShouldBeEquivalentTo(new Point(500, 500));
         }
 
-        [TestCase(1001, 1001, TestName = "TooBigRectangle")]
-        [TestCase(1, 1001, TestName = "TooHighRectangle")]
-        [TestCase(1001, 1, TestName = "TooWideRectangle")]
-        public void CircularCloudLayouter_IncorrectSizeRectngle_ShouldThrowException(int weight, int height)
-        {
-            Assert.Throws<ArgumentException>(() => sut.PutNextRectangle(new Size(weight, height)));
-        }
-
-        [Test]
-        public void CircularCloudLayouter_OutOfBorderRectngle_ShouldThrowException()
-        {
-            sut.PutNextRectangle(new Size(1000, 1000));
-
-            Assert.Throws<PointSelectionException>(() => sut.PutNextRectangle(new Size(1, 1)));
-        }
-
         [Test]
         public void CircularCloudLayouter_PutNextRectngle_RectanglesDoNotIntersects()
         {
-            var size = new Size(25, 25);
+            var rnd = new Random();
             var rectangles = new List<Rectangle>();
             
-            for (var i = 0; i < 100; i++)
-                rectangles.Add(sut.PutNextRectangle(size));
+            for (var i = 0; i < 500; i++)
+                rectangles.Add(sut.PutNextRectangle(new Size(rnd.Next(5, 25), rnd.Next(5, 25))));
 
             rectangles.
                 Select(r => 

@@ -17,7 +17,7 @@ namespace TagsCloudVisualization.Tests
         {
             var center = new Point(500, 500);
             var workingArea=  new Rectangle(500, 500, 1000, 1000);
-            sut = new TestSpiralPointLayouter(center, workingArea.GetDiagonal() / 2);
+            sut = new TestSpiralPointLayouter(center);
         }
 
         [TestCase(1, 50, TestName = "PositiveAngleStep")]
@@ -74,14 +74,15 @@ namespace TagsCloudVisualization.Tests
             sut.GetNextPoint(1, 50);
 
             var rnd = new Random();
-            var firstStep = rnd.Next(int.MinValue, int.MaxValue);
-            var secondStep = rnd.Next(int.MinValue, int.MaxValue);
+            var firstStep = rnd.Next(int.MinValue / 3, int.MaxValue / 3);
+            var secondStep = rnd.Next(int.MinValue / 3, int.MaxValue / 3);
 
             sut.TestUpdateAngleAndRadius(0, firstStep);
             sut.TestUpdateAngleAndRadius(0, secondStep);
 
             var actualAngle = firstStep * Math.PI / 360 % (Math.PI * 2);
-            actualAngle += secondStep * Math.PI / 360 % (Math.PI * 2);
+            actualAngle += secondStep * Math.PI / 360;
+            actualAngle %= Math.PI * 2;
             Math.Round(sut.CurrentAngle, 5).ShouldBeEquivalentTo(Math.Round(actualAngle, 5));
         }
 

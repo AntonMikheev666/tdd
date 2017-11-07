@@ -9,12 +9,10 @@ namespace TagsCloudVisualization.Implementation
         protected double currentRadius;
         protected double currentAngle;
         private bool wasUsed;
-        private readonly double radiusLimit;
 
-        public SpiralPointLayouter(Point center, double radiusLimit)
+        public SpiralPointLayouter(Point center)
         {
             this.center = center;
-            this.radiusLimit = radiusLimit;
         }
         
         public Point GetNextPoint(double radiusStep, double angleStep)
@@ -25,9 +23,9 @@ namespace TagsCloudVisualization.Implementation
                 return center;
             }
 
-            UpdateAngleAndRadius(radiusStep, angleStep);
-
             RadiusCheck(radiusStep);
+
+            UpdateAngleAndRadius(radiusStep, angleStep);
 
             var x = center.X + (int)Math.Round(currentRadius * Math.Cos(currentAngle));
             var y = center.Y + (int)Math.Round(currentRadius * Math.Sin(currentAngle));
@@ -43,13 +41,10 @@ namespace TagsCloudVisualization.Implementation
 
         private void RadiusCheck(double radiusStep)
         {
-            if (currentRadius < 0)
+            if (currentRadius + radiusStep < 0)
                 throw new ArgumentException($"Redius can't be negative. " +
-                                            $"Current radius: {currentRadius - radiusStep} " +
+                                            $"Current radius: {currentRadius} " +
                                             $"Radius step: {radiusStep}.");
-
-            if (currentRadius >= radiusLimit)
-                throw new PointSelectionException("Out of free space.");
         }
     }
 }
