@@ -1,5 +1,4 @@
 ﻿using System;
-using TagsCloudVisualization.Implementation;
 using System.Drawing;
 using FluentAssertions;
 using NUnit.Framework;
@@ -28,7 +27,7 @@ namespace TagsCloudVisualization.Tests
             var x = sut.Center.X + (int)Math.Round(2 * radiusStep * Math.Cos(angleStep * Math.PI / 360));
             var y = sut.Center.Y + (int)Math.Round(2 * radiusStep * Math.Sin(angleStep * Math.PI / 360));
 
-            var result = new [] {sut.GetNextPoint(radiusStep, angleStep),
+            var result = new [] {sut.GetNextPoint(0, 0),
                                  sut.GetNextPoint(radiusStep, 0),
                                  sut.GetNextPoint(radiusStep, angleStep)};
             result.ShouldBeEquivalentTo(
@@ -38,7 +37,6 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_NegativeRadiusStepOnFirstCalculation_ShouldThrowException()
         {
-            sut.GetNextPoint(1, 50);
             Assert.Throws<ArgumentException>(() => sut.GetNextPoint(-1, 50));
         }
 
@@ -56,8 +54,6 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_Radius_ChangesCorrectly()
         {
-            sut.GetNextPoint(1, 50);
-
             var rnd = new Random();
             var firstStep = rnd.Next();
             var secondStep = rnd.Next(firstStep);
@@ -71,7 +67,6 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_Angle_ChangesCorrectly()
         {
-            sut.GetNextPoint(1, 50);
 
             var rnd = new Random();
             var firstStep = rnd.Next(int.MinValue / 3, int.MaxValue / 3);
@@ -89,8 +84,6 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_Angle_AngleMoreThen360()
         {
-            sut.GetNextPoint(1, 50);
-
             var rnd = new Random();
             var firstStep = rnd.Next(360, Int32.MaxValue);
 

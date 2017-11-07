@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -25,14 +24,14 @@ namespace TagsCloudVisualization.Implementation
             rectangles.Add(nextRectangle);
             return nextRectangle;
         }
-
-        //попробовать хранить последнюю точку и искать следующую за О(1)
+        
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
-            var possibleCenter = pointComputer.GetNextPoint(0.1, 50);
-
-            var leftTopCorner = possibleCenter.GetLeftTopCorner(rectangleSize);
-            return new Rectangle(leftTopCorner, rectangleSize);
+            if(rectangles.Count == 0)
+                return new Rectangle(pointComputer.GetNextPoint(0, 0).GetLeftTopCorner(rectangleSize),
+                                     rectangleSize);
+            return new Rectangle(pointComputer.GetNextPoint(0.1, 50).GetLeftTopCorner(rectangleSize), 
+                                 rectangleSize);
         }
     }
 }

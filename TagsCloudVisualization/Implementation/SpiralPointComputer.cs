@@ -8,7 +8,6 @@ namespace TagsCloudVisualization.Implementation
         protected readonly Point center;
         protected double currentRadius;
         protected double currentAngle;
-        private bool wasUsed;
 
         public SpiralPointComputer(Point center)
         {
@@ -17,12 +16,6 @@ namespace TagsCloudVisualization.Implementation
         
         public Point GetNextPoint(double radiusStep, double angleStep)
         {
-            if (!wasUsed)
-            {
-                wasUsed = true;
-                return center;
-            }
-
             RadiusCheck(radiusStep);
 
             UpdateAngleAndRadius(radiusStep, angleStep);
