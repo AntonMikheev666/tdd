@@ -3,14 +3,14 @@ using System.Drawing;
 
 namespace TagsCloudVisualization.Implementation
 {
-    public class SpiralPointLayouter
+    public class SpiralPointComputer
     {
         protected readonly Point center;
         protected double currentRadius;
         protected double currentAngle;
         private bool wasUsed;
 
-        public SpiralPointLayouter(Point center)
+        public SpiralPointComputer(Point center)
         {
             this.center = center;
         }

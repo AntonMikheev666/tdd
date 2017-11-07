@@ -10,14 +10,14 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class PointLayouterTests
     {
-        private TestSpiralPointLayouter sut;
+        private TestSpiralPointComputer sut;
 
         [SetUp]
         public void SetUp()
         {
             var center = new Point(500, 500);
             var workingArea=  new Rectangle(500, 500, 1000, 1000);
-            sut = new TestSpiralPointLayouter(center);
+            sut = new TestSpiralPointComputer(center);
         }
 
         [TestCase(1, 50, TestName = "PositiveAngleStep")]

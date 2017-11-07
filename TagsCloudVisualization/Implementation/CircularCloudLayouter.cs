@@ -8,12 +8,12 @@ namespace TagsCloudVisualization.Implementation
     public class CircularCloudLayouter : ICloudLayouter
     {
         protected List<Rectangle> rectangles;
-        private SpiralPointLayouter pointLayouter;
+        private SpiralPointComputer pointComputer;
 
         public CircularCloudLayouter(Point center)
         {
             rectangles = new List<Rectangle>();
-            pointLayouter = new SpiralPointLayouter(center);
+            pointComputer = new SpiralPointComputer(center);
         }
 
         public Rectangle PutNextRectangle(Size rectangleSize)
@@ -29,7 +29,7 @@ namespace TagsCloudVisualization.Implementation
         //попробовать хранить последнюю точку и искать следующую за О(1)
         private Rectangle GetNextRectangle(Size rectangleSize)
         {
-            var possibleCenter = pointLayouter.GetNextPoint(0.1, 50);
+            var possibleCenter = pointComputer.GetNextPoint(0.1, 50);
 
             var leftTopCorner = possibleCenter.GetLeftTopCorner(rectangleSize);
             return new Rectangle(leftTopCorner, rectangleSize);

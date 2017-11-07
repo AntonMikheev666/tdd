@@ -11,7 +11,7 @@ namespace TagsCloudVisualization.Tests
     class ExtentionsTests
     {
         [Test]
-        public void PointExtention_GetLeftTopCorner_ReturnCorrectPoint()
+        public void PointExtention_GetLeftTopCornerOfRandomRectngle_ReturnCorrectPoint()
         {
             var rnd = new Random();
             var x = rnd.Next();
@@ -21,9 +21,9 @@ namespace TagsCloudVisualization.Tests
 
             var center = new Point(x, y);
 
-            var leftTopCorner = new Point(x - width / 2, y - height / 2);
+            var actualLeftTopCorner = new Point(x - width / 2, y - height / 2);
 
-            center.GetLeftTopCorner(new Size(width, height)).ShouldBeEquivalentTo(leftTopCorner);
+            center.GetLeftTopCorner(new Size(width, height)).ShouldBeEquivalentTo(actualLeftTopCorner);
         }
 
         [Test]
