@@ -49,11 +49,11 @@ namespace TagsCloudVisualization.Tests
         [TestCase(200, 100, TestName = "HorizontalRectangle")]
         [TestCase(0, 0, TestName = "Point")]
         [TestCase(1000, 1000, TestName = "BiggestPossiblerectangle")]
-        public void CircularCloudLayouter_FirstRectngle_Centered(int weight, int height)
+        public void CircularCloudLayouter_FirstRectngle_InCenter(int weight, int height)
         {
             sut.PutNextRectangle(new Size(weight, height))
                 .GetCenter()
-                .ShouldBeEquivalentTo(new Point(500, 500));
+                .ShouldBeEquivalentTo(center);
         }
 
         [Test, TestCaseSource(nameof(GetRectangles))]

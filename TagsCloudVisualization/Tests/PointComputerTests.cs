@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Drawing;
 using FluentAssertions;
 using NUnit.Framework;
@@ -9,29 +10,22 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class PointComputerTests
     {
-        private TestSpiralPointComputer sut;
+        private static TestSpiralPointComputer sut = new TestSpiralPointComputer(new Point(500, 500));
 
         [SetUp]
         public void SetUp()
         {
-            var center = new Point(500, 500);
-            sut = new TestSpiralPointComputer(center);
+            sut = new TestSpiralPointComputer(new Point(500, 500));
         }
 
-        [TestCase(1, 50, TestName = "PositiveAngleStep")]
-        [TestCase(1, -50, TestName = "NegativeAngleStep")]
-        public void SpiralPointLayouter_Should_CalculateCorrect(double radiusStep, double angleStep)
+        [Test, TestCaseSource(nameof(GetTestCaseData))]
+        public Point[] SpiralPointLayouter_Should_CalculateCorrect(double radiusStep, double angleStep)
         {
-
-            var x = sut.Center.X + (int)Math.Round(2 * radiusStep * Math.Cos(angleStep * Math.PI / 360));
-            var y = sut.Center.Y + (int)Math.Round(2 * radiusStep * Math.Sin(angleStep * Math.PI / 360));
-
             var result = new [] {sut.GetNextPoint(0, 0),
                                  sut.GetNextPoint(radiusStep, 0),
                                  sut.GetNextPoint(radiusStep, angleStep)};
 
-            result.ShouldBeEquivalentTo(
-                new [] { sut.Center, new Point(sut.Center.X + (int)radiusStep, sut.Center.Y), new Point(x, y)});
+            return result;
         }
 
         [Test]
@@ -88,6 +82,28 @@ namespace TagsCloudVisualization.Tests
 
             var actualAngle = (firstStep * Math.PI / 360) % (Math.PI * 2);
             Math.Round(sut.CurrentAngle, 5).ShouldBeEquivalentTo(Math.Round(actualAngle, 5));
+        }
+
+        private static IEnumerable GetTestCaseData
+        {
+            get
+            {
+                yield return new TestCaseData(1, -50).Returns(GetActualResult(1, -50)).SetName("NegativeAngleStep");
+                yield return new TestCaseData(1, 50).Returns(GetActualResult(1, 50)).SetName("PositiveAngleStep");
+            }
+        }
+
+        private static Point[] GetActualResult(double radiusStep, double angleStep)
+        {
+            var x = sut.Center.X + (int)Math.Round(2 * radiusStep * Math.Cos(angleStep * Math.PI / 360));
+            var y = sut.Center.Y + (int)Math.Round(2 * radiusStep * Math.Sin(angleStep * Math.PI / 360));
+
+            return new[]
+            {
+                sut.Center,
+                new Point(sut.Center.X + (int)Math.Round(radiusStep), sut.Center.Y),
+                new Point(x, y)
+            };
         }
     }
 }
