@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using TagsCloudVisualization.Implementation;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,8 +15,8 @@ namespace TagsCloudVisualization.Tests
     [TestFixture]
     class CloudLayouterTests
     {
-        private Point center = new Point(500, 500);
-        private TestCircularCloudLayouter sut;
+        private static Point center = new Point(500, 500);
+        private static TestCircularCloudLayouter sut = new TestCircularCloudLayouter(center);
 
         [SetUp]
         public void SetUp()
@@ -40,6 +41,7 @@ namespace TagsCloudVisualization.Tests
             canvas.Save();
 
             canvasBitmap.Save(path, ImageFormat.Png);
+            Console.WriteLine($"Image was saved in {path}.");
         }
 
         [TestCase(100, 100, TestName = "Square")]
@@ -54,20 +56,28 @@ namespace TagsCloudVisualization.Tests
                 .ShouldBeEquivalentTo(new Point(500, 500));
         }
 
-        [Test]
-        public void CircularCloudLayouter_PutNextRectngle_RectanglesDoNotIntersects()
+        [Test, TestCaseSource(nameof(GetRectangles))]
+        public void CircularCloudLayouter_PutNextRectngle_RandomRectanglesDoNotIntersects(List<Rectangle> rectangles)
         {
-            var rnd = new Random();
-            var rectangles = new List<Rectangle>();
-            
-            for (var i = 0; i < 500; i++)
-                rectangles.Add(sut.PutNextRectangle(new Size(rnd.Next(5, 25), rnd.Next(5, 25))));
-
             rectangles.
                 Select(r => 
                     rectangles.Where(rect => rect != r)
                         .Any(rect => rect.IntersectsWith(r)))
                 .ShouldAllBeEquivalentTo(false);
+        }
+
+        private static IEnumerable GetRectangles
+        {
+            get
+            {
+                var rnd = new Random();
+                var rectangles = new List<Rectangle>();
+
+                for (var i = 0; i < 500; i++)
+                    rectangles.Add(sut.PutNextRectangle(new Size(rnd.Next(5, 25), rnd.Next(5, 25))));
+
+                yield return rectangles;
+            }
         }
     }
 }

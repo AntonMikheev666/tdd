@@ -12,10 +12,5 @@ namespace TagsCloudVisualization.Tests
         public TestSpiralPointComputer(Point center): base(center)
         {
         }
-
-        public void TestUpdateAngleAndRadius(double radiusStep, double angleStep)
-        {
-            UpdateAngleAndRadius(radiusStep, angleStep);
-        }
     }
 }

@@ -27,7 +27,7 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void RectangleExtention_GetCenter_ReturnCorrectCenter()
+        public void RectangleExtention_GetCenterOfRandomRectngle_ReturnCorrectCenter()
         {
             var rnd = new Random();
             var x = rnd.Next(int.MinValue, 0);
@@ -46,7 +46,7 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void RectangleExtention_GetDiagonal_ReturnCorrectDiagonal()
+        public void RectangleExtention_GetDiagonalOfRandomRectngle_ReturnCorrectDiagonal()
         {
             var rnd = new Random();
             var height = rnd.Next();

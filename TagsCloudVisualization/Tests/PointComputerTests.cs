@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace TagsCloudVisualization.Tests
 {
     [TestFixture]
-    class PointLayouterTests
+    class PointComputerTests
     {
         private TestSpiralPointComputer sut;
 
@@ -15,7 +15,6 @@ namespace TagsCloudVisualization.Tests
         public void SetUp()
         {
             var center = new Point(500, 500);
-            var workingArea=  new Rectangle(500, 500, 1000, 1000);
             sut = new TestSpiralPointComputer(center);
         }
 
@@ -30,6 +29,7 @@ namespace TagsCloudVisualization.Tests
             var result = new [] {sut.GetNextPoint(0, 0),
                                  sut.GetNextPoint(radiusStep, 0),
                                  sut.GetNextPoint(radiusStep, angleStep)};
+
             result.ShouldBeEquivalentTo(
                 new [] { sut.Center, new Point(sut.Center.X + (int)radiusStep, sut.Center.Y), new Point(x, y)});
         }
@@ -43,8 +43,6 @@ namespace TagsCloudVisualization.Tests
         [Test]
         public void SpirelPointLayouter_TooBigNegativeRadiusStep_ShouldThrowException()
         {
-            sut.GetNextPoint(1, 50);
-
             sut.GetNextPoint(10, 50);
             sut.GetNextPoint(10, 50);
 
@@ -52,28 +50,27 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void SpirelPointLayouter_Radius_ChangesCorrectly()
+        public void SpirelPointLayouter_RandomRadiusSteps_RadiusChangesCorrectly()
         {
             var rnd = new Random();
             var firstStep = rnd.Next();
             var secondStep = rnd.Next(firstStep);
 
-            sut.TestUpdateAngleAndRadius(firstStep, 0);
-            sut.TestUpdateAngleAndRadius(-secondStep, 0);
+            sut.GetNextPoint(firstStep, 0);
+            sut.GetNextPoint(-secondStep, 0);
 
             sut.CurrentRadius.ShouldBeEquivalentTo(firstStep - secondStep);
         }
 
         [Test]
-        public void SpirelPointLayouter_Angle_ChangesCorrectly()
+        public void SpirelPointLayouter_RandomAngleSteps_AngleChangesCorrectly()
         {
-
             var rnd = new Random();
             var firstStep = rnd.Next(int.MinValue / 3, int.MaxValue / 3);
             var secondStep = rnd.Next(int.MinValue / 3, int.MaxValue / 3);
 
-            sut.TestUpdateAngleAndRadius(0, firstStep);
-            sut.TestUpdateAngleAndRadius(0, secondStep);
+            sut.GetNextPoint(0, firstStep);
+            sut.GetNextPoint(0, secondStep);
 
             var actualAngle = firstStep * Math.PI / 360 % (Math.PI * 2);
             actualAngle += secondStep * Math.PI / 360;
@@ -82,12 +79,12 @@ namespace TagsCloudVisualization.Tests
         }
 
         [Test]
-        public void SpirelPointLayouter_Angle_AngleMoreThen360()
+        public void SpirelPointLayouter_RandomAngleStep_CutAngleMoreThen360()
         {
             var rnd = new Random();
             var firstStep = rnd.Next(360, Int32.MaxValue);
 
-            sut.TestUpdateAngleAndRadius(0, firstStep);
+            sut.GetNextPoint(0, firstStep);
 
             var actualAngle = (firstStep * Math.PI / 360) % (Math.PI * 2);
             Math.Round(sut.CurrentAngle, 5).ShouldBeEquivalentTo(Math.Round(actualAngle, 5));
